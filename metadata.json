@@ -1,0 +1,6 @@
+{
+  "name": "학온 HR",
+  "description": "학원 운영 및 전자계약, 리스크 검증을 지원하는 스마트 인사 관리 플랫폼 (Phase 1)",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
