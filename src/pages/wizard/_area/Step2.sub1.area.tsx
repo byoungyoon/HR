@@ -95,7 +95,7 @@ export default function Step2Sub1Area() {
   return (
     <Accordion
       step={1}
-      title="📅 계약 기간 및 수습 설정"
+      title="계약 기간 및 수습 설정"
       isOpen={wizSubStep === 1}
       isDone={maxUnlockedSubStep >= 2}
       activeColor="blue"
@@ -109,7 +109,6 @@ export default function Step2Sub1Area() {
         </>
       }
     >
-      {/* 계약 시작일 */}
       <div>
         <label className="mb-1.5 block text-xs font-bold text-slate-700">
           계약 시작일 <span className="text-red-500">*</span>
@@ -122,7 +121,6 @@ export default function Step2Sub1Area() {
         />
       </div>
 
-      {/* 계약 기간 퀵 선택 */}
       <div className="space-y-2">
         <label className="block text-xs font-bold text-slate-700">
           계약 기간 <span className="text-red-500">*</span>
@@ -156,7 +154,6 @@ export default function Step2Sub1Area() {
         </div>
       </div>
 
-      {/* 계약 종료일 — 언제나 수정 가능 */}
       <div className="space-y-1.5">
         <label className="block text-xs font-bold text-slate-700">
           계약 종료일{' '}
@@ -185,7 +182,6 @@ export default function Step2Sub1Area() {
         </div>
       </div>
 
-      {/* 수습 기간 퀵 선택 */}
       <div className="space-y-2">
         <label className="block text-xs font-bold text-slate-700">수습 기간</label>
         <div className="flex flex-wrap gap-2">
@@ -210,9 +206,6 @@ export default function Step2Sub1Area() {
         </div>
       </div>
 
-
-
-      {/* 다음 버튼 */}
       <div className="flex justify-end border-t border-slate-100 pt-2">
         <button
           type="button"
