@@ -118,6 +118,8 @@ interface AppState {
   wizSpecialClause: string;
   // state contract/wizContractText: string
   wizContractText: string;
+  // state contract/wizCommissionPercent: number
+  wizCommissionPercent: number;
 
   // state instructor/selectedMyPageContractId: string | null
   selectedMyPageContractId: string | null;
@@ -204,6 +206,7 @@ interface AppState {
   setWizNonCompeteAmount: (amount: number) => void;
   setWizSpecialClause: (clause: string) => void;
   setWizContractText: (text: string) => void;
+  setWizCommissionPercent: (percent: number) => void;
 
   applyQuickSchedule: (type: '5days' | '3days' | 'custom') => void;
   applyAlternative: (index: number, validationResult: any) => void;
@@ -375,6 +378,8 @@ export const useStore = create<AppState>((set, get) => ({
   wizSpecialClause: '',
   // state contract/wizContractText: '',
   wizContractText: '',
+  // state contract/wizCommissionPercent: number
+  wizCommissionPercent: 30,
 
   // state instructor/selectedMyPageContractId: string | null
   selectedMyPageContractId: null,
@@ -496,6 +501,7 @@ export const useStore = create<AppState>((set, get) => ({
   setWizNonCompeteAmount: amount => set({ wizNonCompeteAmount: amount }),
   setWizSpecialClause: clause => set({ wizSpecialClause: clause }),
   setWizContractText: text => set({ wizContractText: text }),
+  setWizCommissionPercent: percent => set({ wizCommissionPercent: percent }),
 
   applyQuickSchedule: type => {
     set({ wizWorkDaysType: type });
@@ -663,7 +669,7 @@ export const useStore = create<AppState>((set, get) => ({
     const newContract: Contract = {
       id: docId,
       type: 'contract',
-      title: `${targetPerson.name} 강사 근로계약서 (${wizContractType === 'freelancer' ? '위촉' : '근로'})`,
+      title: `${targetPerson.name} 강사 근로계약서 (${wizContractType === '강사위촉계약서' ? '위촉' : '근로'})`,
       version: 1,
       status: 'pending_signature',
       personId: wizInstructorId,

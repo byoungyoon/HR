@@ -65,7 +65,7 @@ export default function Cabinet() {
                         </p>
                         <p className="mb-1">
                           근로형태:{' '}
-                          {c.contractType === 'freelancer' ? '프리랜서 위촉' : '표준정직원근로'}
+                          {c.contractType === '강사위촉계약서' ? '프리랜서 위촉' : '표준근로계약'}
                         </p>
                         <p className="mb-1">약정시급: 시간당 {c.salaryAmount.toLocaleString()}원</p>
                         <p className="mb-4">소정시간: 주당 {c.weeklyHours}시간 근무</p>

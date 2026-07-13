@@ -11,7 +11,7 @@ export function sha256Simulate(str: string): string {
 }
 
 // 2026년 최저시급 정보
-export const MINIMUM_WAGE_2026 = 10030;
+export const MINIMUM_WAGE_2026 = 10320;
 
 // 인사이트 강사 리스트 모의 데이터 (SSOT 마스터 데이터 연동 시뮬레이션용)
 export const INSIGHT_INSTRUCTORS: Person[] = [
@@ -62,7 +62,7 @@ export const INITIAL_CONTRACTS: Contract[] = [
     personId: 'CI_83921029',
     createdAt: '2025-02-28T14:30:00Z',
     hash: 'sha256_3b1b9e82c5a6109f',
-    contractType: 'instructor_labor',
+    contractType: '강사근로계약서',
     salaryType: 'hourly',
     salaryAmount: 12000,
     weeklyHours: 18,
@@ -85,7 +85,7 @@ export const INITIAL_CONTRACTS: Contract[] = [
     personId: 'CI_10283719',
     createdAt: '2026-07-08T10:15:00Z',
     hash: 'sha256_f8291a8c0d9e2b14',
-    contractType: 'instructor_labor',
+    contractType: '강사근로계약서',
     salaryType: 'hourly',
     salaryAmount: 10500,
     weeklyHours: 20,

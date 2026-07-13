@@ -6,7 +6,6 @@ import {
   Layers,
   Plus,
   FileText,
-  History,
   Building,
   Sparkles,
 } from 'lucide-react';
@@ -139,22 +138,6 @@ export default function Layout() {
                     <span className="flex-1">계약보관함</span>
                     <span className="rounded bg-slate-100 px-1 py-0.5 font-mono text-[8px] text-slate-500">
                       P1
-                    </span>
-                  </NavLink>
-                  <NavLink
-                    to="/admin/logs"
-                    className={({ isActive }) =>
-                      `flex w-full items-center space-x-3 rounded-2xl px-4 py-3 text-left text-xs font-bold transition-all duration-200 ${
-                        isActive
-                          ? 'scale-[1.02] bg-slate-900 text-white shadow-lg shadow-slate-900/10'
-                          : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
-                      }`
-                    }
-                  >
-                    <History className="h-4 w-4" />
-                    <span className="flex-1">시스템 감사로그</span>
-                    <span className="font-mono text-xs font-bold text-slate-400">
-                      {eventLogs.length}
                     </span>
                   </NavLink>
                   <NavLink

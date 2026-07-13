@@ -3,8 +3,8 @@ import { create } from 'zustand';
 
 type State = {
   wizardStep: number;
-  // state contract/wizSubStep: 1 | 2 | 3
-  wizSubStep: 1 | 2 | 3;
+  // state contract/wizSubStep: 0 | 1 | 2 | 3
+  wizSubStep: 0 | 1 | 2 | 3;
   // state contract/maxUnlockedSubStep: 1 | 2 | 3
   maxUnlockedSubStep: 1 | 2 | 3;
   // state contract/wizInstructorId: string
@@ -26,6 +26,8 @@ type State = {
   wizProbation: string;
   // state contract/wizWorkDaysType: '5days' | '3days' | 'custom'
   wizWorkDaysType: '5days' | '3days' | 'custom';
+  // state contract/wizScheduleApplied: boolean
+  wizScheduleApplied: boolean;
   // state contract/wizDaysConfig: object
   wizDaysConfig: {
     [key: string]: {
@@ -49,6 +51,8 @@ type State = {
   showChangePulse: boolean;
   // state contract/wizSalaryType: SalaryType
   wizSalaryType: SalaryType;
+  // state contract/wizSalaryApplied: boolean
+  wizSalaryApplied: boolean;
   // state contract/wizSalaryAmount: number
   wizSalaryAmount: number;
   // state contract/wizNonTaxFood: number
@@ -81,7 +85,7 @@ type State = {
 
 type Action = {
   setWizardStep: (step: number) => void;
-  setWizSubStep: (subStep: 1 | 2 | 3) => void;
+  setWizSubStep: (subStep: 0 | 1 | 2 | 3) => void;
   setMaxUnlockedSubStep: (subStep: 1 | 2 | 3) => void;
   setWizInstructorId: (id: string) => void;
   setWizInstructorName: (name: string) => void;
@@ -95,6 +99,7 @@ type Action = {
   setWizEndDate: (date: string) => void;
   setWizProbation: (probation: string) => void;
   setWizWorkDaysType: (type: '5days' | '3days' | 'custom') => void;
+  setWizScheduleApplied: (v: boolean) => void;
   setWizDaysConfig: (
     config: State['wizDaysConfig'] | ((prev: State['wizDaysConfig']) => State['wizDaysConfig'])
   ) => void;
@@ -105,6 +110,7 @@ type Action = {
   setEditingDay: (day: string | null) => void;
   setShowChangePulse: (show: boolean) => void;
   setWizSalaryType: (type: SalaryType) => void;
+  setWizSalaryApplied: (applied: boolean) => void;
   setWizSalaryAmount: (amount: number) => void;
   setWizNonTaxFood: (amount: number) => void;
   setWizHasCarAllowance: (has: boolean) => void;
@@ -147,6 +153,8 @@ export const useWizaredStore = create<State & Action>(set => ({
   wizProbation: '3개월',
   // state contract/wizWorkDaysType: '5days' | '3days' | 'custom'
   wizWorkDaysType: '5days',
+  // state contract/wizScheduleApplied: boolean
+  wizScheduleApplied: false,
   // state contract/wizDaysConfig: object
   wizDaysConfig: {
     월요일: {
@@ -206,6 +214,8 @@ export const useWizaredStore = create<State & Action>(set => ({
   showChangePulse: false,
   // state contract/wizSalaryType: SalaryType
   wizSalaryType: 'hourly',
+  // state contract/wizSalaryApplied: boolean
+  wizSalaryApplied: false,
   // state contract/wizSalaryAmount: number
   wizSalaryAmount: 10320,
   // state contract/wizNonTaxFood: number
@@ -250,6 +260,7 @@ export const useWizaredStore = create<State & Action>(set => ({
   setWizEndDate: date => set({ wizEndDate: date }),
   setWizProbation: probation => set({ wizProbation: probation }),
   setWizWorkDaysType: type => set({ wizWorkDaysType: type }),
+  setWizScheduleApplied: v => set({ wizScheduleApplied: v }),
   setWizDaysConfig: updater =>
     set(state => ({
       wizDaysConfig: typeof updater === 'function' ? updater(state.wizDaysConfig) : updater,
@@ -261,6 +272,7 @@ export const useWizaredStore = create<State & Action>(set => ({
   setEditingDay: day => set({ editingDay: day }),
   setShowChangePulse: show => set({ showChangePulse: show }),
   setWizSalaryType: type => set({ wizSalaryType: type }),
+  setWizSalaryApplied: applied => set({ wizSalaryApplied: applied }),
   setWizSalaryAmount: amount => set({ wizSalaryAmount: amount }),
   setWizNonTaxFood: amount => set({ wizNonTaxFood: amount }),
   setWizHasCarAllowance: has => set({ wizHasCarAllowance: has }),

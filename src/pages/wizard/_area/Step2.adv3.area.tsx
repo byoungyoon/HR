@@ -1,0 +1,99 @@
+import { AlertTriangle, CheckCircle2, Info } from 'lucide-react';
+import { useWizaredStore } from '../state';
+
+export default function Step2Adv3Area() {
+  const { wizDaysConfig, wizSalaryType, wizSalaryAmount } = useWizaredStore();
+
+  const calculateDailyHours = (start: string, end: string, breakStr: string): number => {
+    const [sH, sM] = start.split(':').map(Number);
+    const [eH, eM] = end.split(':').map(Number);
+    const totalMinutes = eH * 60 + eM - (sH * 60 + sM);
+    let breakMinutes = 0;
+    if (breakStr === '30분') breakMinutes = 30;
+    else if (breakStr === '1시간') breakMinutes = 60;
+    else if (breakStr === '1.5시간') breakMinutes = 90;
+    else if (breakStr === '2시간') breakMinutes = 120;
+    return Math.max(0, (totalMinutes - breakMinutes) / 60);
+  };
+
+  const weeklyHours = parseFloat(
+    Object.values(wizDaysConfig)
+      .reduce(
+        (sum, conf) =>
+          sum +
+          (conf.enabled ? calculateDailyHours(conf.startTime, conf.endTime, conf.breakTime) : 0),
+        0
+      )
+      .toFixed(1)
+  );
+
+  const hasWeeklyRestAllowance = weeklyHours >= 15;
+
+  return (
+    <div className="animate-in fade-in space-y-3 duration-200">
+      {(() => {
+        const minWageLimit = 10320;
+        let isMinWageViolation = false;
+        let explanationText = '';
+        let calcMinWage = 0;
+
+        if (wizSalaryType === 'hourly') {
+          isMinWageViolation = wizSalaryAmount < minWageLimit;
+          explanationText = `시간당 ${wizSalaryAmount.toLocaleString()}원입니다.`;
+        } else {
+          const weeklyRestHours = hasWeeklyRestAllowance ? Math.min(8, (weeklyHours / 40) * 8) : 0;
+          const monthlyHours = (weeklyHours + weeklyRestHours) * 4.345;
+          calcMinWage = Math.round(monthlyHours * minWageLimit);
+          isMinWageViolation = wizSalaryAmount < calcMinWage;
+          explanationText = `소정근로 주 ${weeklyHours}시간 대비, 2026년 법정 기준 월 환산액은 ${calcMinWage.toLocaleString()}원입니다.`;
+        }
+
+        return (
+          <div
+            className={`space-y-2 rounded-2xl border-2 p-4 transition-all ${
+              isMinWageViolation
+                ? 'border-rose-200 bg-rose-50/80 text-rose-900 shadow-sm'
+                : 'border-emerald-100 bg-emerald-50/50 text-emerald-900 shadow-sm'
+            }`}
+          >
+            <div className="flex items-center gap-1.5 text-[11px] font-extrabold">
+              {isMinWageViolation ? (
+                <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-rose-600" />
+              ) : (
+                <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-600" />
+              )}
+              <span className={isMinWageViolation ? 'text-rose-850' : 'text-emerald-850'}>
+                {isMinWageViolation
+                  ? '🚨 [위험] 최저임금법 위반 소지'
+                  : '✔ [적정] 최저임금 기준 통과'}
+              </span>
+            </div>
+            <p className="text-[11px] leading-relaxed font-medium text-slate-600">
+              {isMinWageViolation
+                ? `책정된 급여가 법정 기준치 미만입니다. 최저임금법 제6조 위반으로 3년 이하의 징역 또는 2천만원 이하의 벌금에 처해질 수 있습니다. 즉시 급여 상향이 요구됩니다.`
+                : `2026년 시간당 법정 최저시급(10,320원)을 철저히 준수하고 있습니다.`}
+            </p>
+            <p className="mt-1 font-mono text-[10px] text-slate-400">{explanationText}</p>
+          </div>
+        );
+      })()}
+
+      {(() => {
+        const isMonthly = wizSalaryType === 'monthly';
+        return (
+          <div className="space-y-2 rounded-2xl border border-slate-200/70 bg-white p-4 shadow-sm">
+            <div className="flex items-center gap-1.5 text-[11px] font-extrabold text-slate-800">
+              <Info className="h-3.5 w-3.5 shrink-0 text-indigo-500" />
+              <span>⚖ [자문] 포괄임금 계약 유효성 가이드</span>
+            </div>
+            <p className="text-[11px] leading-relaxed font-medium text-slate-600">
+              {isMonthly
+                ? `월급제 계약인 경우, 기본 소정근로에 대한 '기본급'과 주휴수당에 해당하는 '주휴수당액'을 구체적인 지급 한도 시간과 금액으로 쪼개어 계약서상에 구분 기재해야 대법원 판례에 따라 유효한 포괄임금/고정급 계약으로 온전히 인정받을 수 있습니다.`
+                : `시급제 계약의 경우, 근무한 실제 시간에 비례하여 기본급과 주휴수당을 정산해야 하며, 고정액 일괄 포괄임금 계약은 권장하지 않습니다.`}
+            </p>
+          </div>
+        );
+      })()}
+    </div>
+  );
+}

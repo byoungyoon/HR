@@ -151,13 +151,6 @@ export default function Dashboard() {
                 ))}
             </div>
           </div>
-          <button
-            onClick={() => navigate('/admin/logs')}
-            className="mt-4 flex items-center space-x-1 self-start text-[10px] font-bold text-indigo-600 hover:text-indigo-800"
-          >
-            <span>감사로그 전체보기</span>
-            <ChevronRight className="h-3 w-3" />
-          </button>
         </div>
       </div>
 
