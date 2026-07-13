@@ -29,7 +29,7 @@ export default function FormAction() {
   );
 
   return (
-    <div className="grid grid-cols-1 gap-4 rounded-2xl border border-slate-200/80 bg-slate-50/50 p-5 md:grid-cols-2">
+    <div className="border-custom-slate-border-side bg-custom-slate-bg/70 grid grid-cols-2 gap-4 rounded-xl border p-4">
       <div>
         <label className="mb-1.5 block text-xs font-bold text-slate-700">
           강사 이름 <span className="text-red-500">*</span>
@@ -38,7 +38,7 @@ export default function FormAction() {
           type="text"
           value={wizInstructorName}
           onChange={e => setWizInstructorName(e.target.value)}
-          className="w-full rounded-xl border border-slate-200 bg-white p-2.5 text-xs font-semibold focus:ring-2 focus:ring-blue-100 focus:outline-none"
+          className="bg-background"
           placeholder="예: 홍길동"
         />
       </div>
@@ -51,7 +51,7 @@ export default function FormAction() {
           type="text"
           value={wizInstructorPhone}
           onChange={e => setWizInstructorPhone(e.target.value)}
-          className="w-full rounded-xl border border-slate-200 bg-white p-2.5 text-xs font-semibold focus:ring-2 focus:ring-blue-100 focus:outline-none"
+          className="bg-background"
           placeholder="예: 010-1234-5678"
         />
       </div>
@@ -64,7 +64,7 @@ export default function FormAction() {
           type="text"
           value={wizInstructorSubject}
           onChange={e => setWizInstructorSubject(e.target.value)}
-          className="w-full rounded-xl border border-slate-200 bg-white p-2.5 text-xs font-semibold focus:ring-2 focus:ring-blue-100 focus:outline-none"
+          className="bg-background"
           placeholder="예: 공통수학, 수학I"
         />
       </div>
@@ -77,7 +77,7 @@ export default function FormAction() {
           type="date"
           value={wizInstructorBirthDate}
           onChange={e => setWizInstructorBirthDate(e.target.value)}
-          className="w-full rounded-xl border border-slate-200 bg-white p-2.5 text-xs font-semibold focus:ring-2 focus:ring-blue-100 focus:outline-none"
+          className="bg-background"
         />
       </div>
 
@@ -89,7 +89,7 @@ export default function FormAction() {
           type="text"
           value={wizInstructorAddress}
           onChange={e => setWizInstructorAddress(e.target.value)}
-          className="w-full rounded-xl border border-slate-200 bg-white p-2.5 text-xs font-semibold focus:ring-2 focus:ring-blue-100 focus:outline-none"
+          className="bg-background"
           placeholder="예: 서울시 강남구 대치동 123-45"
         />
       </div>

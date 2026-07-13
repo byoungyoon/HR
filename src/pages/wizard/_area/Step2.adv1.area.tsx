@@ -35,10 +35,10 @@ export default function Step2Adv1Area() {
     <div className="space-y-3">
       {/* 계약기간 요약 뱃지 */}
       <div className="space-y-2 rounded-2xl border border-slate-200/70 bg-white p-4">
-        <div className="flex items-center gap-1.5 text-[11px] font-extrabold text-slate-800">
+        <div className="text-text-main flex items-center gap-1.5 text-xs font-extrabold">
           <span>[자문] 기간제 근로계약 유효성 가이드</span>
         </div>
-        <p className="text-[11px] leading-relaxed font-medium text-slate-600">
+        <p className="text-text-sub text-xs leading-relaxed font-medium">
           기간제법 제4조에 의거, 2년을 초과하여 기간제 근로자(강사)로 사용하는 경우 무기계약
           근로자(정규직)로 간주되어 퇴사 통보 시 해고예고 및 부당해고 구제신청 리스크가 발생합니다.
           총 계약 합산 기간이 2년을 넘지 않도록 세심히 관리하십시오.

@@ -16,6 +16,7 @@ import {
   CheckCircle2,
   Clock,
   Building,
+  ChevronRight,
 } from 'lucide-react';
 import { analyzeContractContent, numberToKorean, INITIAL_ACADEMIES } from '../../utils';
 import { ContractType, SalaryType } from '../../types';
@@ -32,6 +33,14 @@ export default function Wizard() {
     persons,
     academies,
     selectedAcademyId,
+    setSelectedAcademyId,
+    showToast,
+    applyQuickSchedule,
+    handleSendContract,
+    wizCommissionPercent,
+  } = useStore();
+
+  const {
     wizInstructorId,
     wizContractType,
     wizStartDate,
@@ -63,7 +72,6 @@ export default function Wizard() {
     wizContractText,
     wizSubStep,
     maxUnlockedSubStep,
-    wizCommissionPercent,
 
     setWizardStep,
     setWizSubStep,
@@ -97,11 +105,7 @@ export default function Wizard() {
     setWizNonCompeteAmount,
     setWizSpecialClause,
     setWizContractText,
-    setSelectedAcademyId,
-    showToast,
-    applyQuickSchedule,
-    handleSendContract,
-  } = useStore();
+  } = useWizaredStore();
 
   // --- 로컬 파생 상태 계산 ---
   const calculateDailyHours = (start: string, end: string, breakStr: string): number => {
@@ -420,25 +424,21 @@ ${wizSalaryAmount.toLocaleString()}원`;
     academies.find(a => a.id === selectedAcademyId) || academies[0] || INITIAL_ACADEMIES[0];
 
   return (
-    <div className="space-y-6 rounded-3xl border border-slate-100 bg-white p-6 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.04),0_12px_24px_-10px_rgba(0,0,0,0.03)] sm:p-8">
-      {/* 헤더 */}
-      <div className="flex flex-col gap-4 border-b border-slate-100 pb-5 md:flex-row md:items-center md:justify-between">
+    <section className="border-custom-slate-border-side bg-background space-y-6 rounded-3xl border p-6">
+      <header className="border-custom-slate-border-side flex items-center justify-between gap-4 border-b pb-5">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-          <h2 className="text-lg font-extrabold tracking-tight text-slate-900">
-            전자계약서 신속 작성 마법사
-          </h2>
+          <h2 className="text-text-title font-extrabold tracking-tight">계약서 작성 마법사</h2>
           {representativeAcademy && (
             <div
               onClick={() => navigate('/admin/academy')}
-              className="flex cursor-pointer items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-2.5 py-1 text-slate-600 transition-all hover:bg-slate-100"
+              className="hover:bg-custom-slate border-custom-slate-border bg-custom-slate-bg text-text-sub flex cursor-pointer items-center gap-1.5 rounded-lg border px-4 py-1.5 transition-all"
               title="클릭하여 학원 정보 설정 페이지로 이동"
             >
-              <Building className="h-3.5 w-3.5 text-slate-400" />
               <div className="text-left">
-                <span className="block text-[10px] leading-none font-bold text-slate-500">
+                <span className="text-14 block leading-none font-bold">
                   {representativeAcademy.name}{' '}
-                  <span className="ml-0.5 text-[9px] font-normal text-slate-400">
-                    (학원정보 설정 →)
+                  <span className="text-text-side text-9 ml-0.5 font-normal">
+                    (학원정보 설정 이동)
                   </span>
                 </span>
               </div>
@@ -446,32 +446,36 @@ ${wizSalaryAmount.toLocaleString()}원`;
           )}
         </div>
 
-        {/* 상단 스텝 프로그레스바 - Bento Grid UI */}
-        <div className="flex max-w-full flex-wrap items-center gap-1.5 overflow-x-auto rounded-full border border-slate-200 bg-slate-50 p-1 shadow-inner">
+        {/* 상단 스텝 프로그레스바 - 강사 마이페이지와 동일한 심플 텍스트 & Chevron 스타일 */}
+        <div className="flex items-center gap-2 overflow-x-auto py-1.5 text-[13px]">
           {[
             { step: 1, label: '1. 강사 및 계약 설정' },
             { step: 2, label: '2. 근무 및 급여설정' },
             { step: 3, label: '3. 특약/자문' },
             { step: 4, label: '4. 초안검토' },
-          ].map(item => (
-            <div
-              key={item.step}
-              onClick={() => {
-                if (item.step < wizardStep || (item.step <= 3 && wizardStep > 1)) {
-                  setWizardStep(item.step);
-                }
-              }}
-              className={`flex cursor-pointer items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-all duration-200 ${
-                wizardStep === item.step
-                  ? 'bg-blue-600 text-white shadow'
-                  : 'text-slate-500 hover:bg-slate-100 hover:text-slate-800'
-              }`}
-            >
-              {item.label}
+          ].map((item, idx) => (
+            <div key={item.step} className="flex shrink-0 items-center gap-2">
+              <span
+                onClick={() => {
+                  if (item.step < wizardStep) {
+                    setWizardStep(item.step);
+                  }
+                }}
+                className={`transition-all duration-200 ${
+                  wizardStep === item.step
+                    ? 'cursor-default font-black text-indigo-600'
+                    : item.step < wizardStep
+                      ? 'text-slate-650 cursor-pointer font-bold hover:text-indigo-600'
+                      : 'cursor-not-allowed font-medium text-slate-300'
+                }`}
+              >
+                {item.label}
+              </span>
+              {idx < 3 && <ChevronRight className="h-3 w-3 text-slate-300" />}
             </div>
           ))}
         </div>
-      </div>
+      </header>
 
       {wizardStep === 1 && <Step1Area />}
 
@@ -482,6 +486,6 @@ ${wizSalaryAmount.toLocaleString()}원`;
 
       {/* 스텝 4: 최종 초안 확인 및 발송 */}
       {wizardStep === 4 && <Step4Area />}
-    </div>
+    </section>
   );
 }
