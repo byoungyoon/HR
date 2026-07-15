@@ -128,6 +128,7 @@ type Action = {
   setWizNonCompeteAmount: (amount: number) => void;
   setWizSpecialClause: (clause: string) => void;
   setWizContractText: (text: string) => void;
+  reset: () => void;
 };
 
 export const useWizaredStore = create<State & Action>(set => ({
@@ -308,4 +309,70 @@ export const useWizaredStore = create<State & Action>(set => ({
   setWizNonCompeteAmount: amount => set({ wizNonCompeteAmount: amount }),
   setWizSpecialClause: clause => set({ wizSpecialClause: clause }),
   setWizContractText: text => set({ wizContractText: text }),
+  reset: () =>
+    set({
+      wizardStep: 1,
+      wizSubStep: 1,
+      wizSubStepClickCount: 0,
+      maxUnlockedSubStep: 1,
+      wizInstructorId: 'CI_10283719',
+      wizInstructorName: '',
+      wizInstructorSubject: '',
+      wizInstructorAddress: '',
+      wizInstructorPhone: '',
+      wizInstructorBirthDate: '',
+      wizContractType: '강사근로계약서',
+      wizStartDate: (() => {
+        const d = new Date();
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd}`;
+      })(),
+      wizPeriodYear: 1,
+      wizEndDate: (() => {
+        const d = new Date();
+        d.setFullYear(d.getFullYear() + 1);
+        d.setDate(d.getDate() - 1);
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd}`;
+      })(),
+      wizProbation: '3개월',
+      wizWorkDaysType: '5days',
+      wizScheduleApplied: false,
+      wizDaysConfig: {
+        월요일: { enabled: true, startTime: '14:00', endTime: '22:00', breakTime: '1시간' },
+        화요일: { enabled: true, startTime: '14:00', endTime: '22:00', breakTime: '1시간' },
+        수요일: { enabled: true, startTime: '14:00', endTime: '22:00', breakTime: '1시간' },
+        목요일: { enabled: true, startTime: '14:00', endTime: '22:00', breakTime: '1시간' },
+        금요일: { enabled: true, startTime: '14:00', endTime: '22:00', breakTime: '1시간' },
+        토요일: { enabled: false, startTime: '09:00', endTime: '18:00', breakTime: '1시간' },
+        일요일: { enabled: false, startTime: '09:00', endTime: '18:00', breakTime: '1시간' },
+      },
+      selectedBatchDays: ['월요일', '화요일', '수요일', '목요일', '금요일'],
+      batchStartTime: '14:00',
+      batchEndTime: '22:00',
+      batchBreakTime: '1시간',
+      editingDay: null,
+      showChangePulse: false,
+      wizSalaryType: 'hourly',
+      wizSalaryApplied: false,
+      wizSalaryAmount: 10320,
+      wizNonTaxFood: 0,
+      wizHasCarAllowance: false,
+      wizNonTaxCar: 0,
+      wizPayDay: '10일',
+      wizOvertimeAllowance: 0,
+      wizPositionAllowance: 0,
+      wizOtherAllowance: 0,
+      wizOtherAllowanceName: '',
+      wizHasNonCompete: false,
+      wizNonCompetePeriod: '6개월',
+      wizNonCompeteRange: '반경 3km',
+      wizNonCompeteAmount: 200000,
+      wizSpecialClause: '',
+      wizContractText: '',
+    }),
 }));

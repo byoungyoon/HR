@@ -30,6 +30,7 @@ export default function Step4Area() {
     wizNonCompetePeriod,
     wizNonCompeteRange,
     wizNonCompeteAmount,
+    reset,
   } = useWizaredStore();
 
   const calculateDailyHours = (start: string, end: string, breakStr: string): number => {
@@ -67,6 +68,7 @@ export default function Step4Area() {
 
   const handleSend = () => {
     handleSendContract(validationResult);
+    reset();
     navigate('/admin/cabinet');
   };
 
