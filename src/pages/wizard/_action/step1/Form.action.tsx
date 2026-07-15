@@ -29,7 +29,7 @@ export default function FormAction() {
   );
 
   return (
-    <div className="border-custom-slate-border-side bg-custom-slate-bg/70 grid grid-cols-2 gap-4 rounded-xl border p-4">
+    <div className="grid grid-cols-2 gap-4">
       <div>
         <label className="mb-1.5 block text-xs font-bold text-slate-700">
           강사 이름 <span className="text-red-500">*</span>

@@ -1,22 +1,16 @@
 import React from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 type AccordionProps = {
-  /** 아코디언 번호 (1, 2, 3...) */
   step: number;
-  /** 헤더 제목 */
   title: string;
-  /** 펼쳐진 상태 여부 */
   isOpen: boolean;
-  /** 완료 상태 여부 (완료 뱃지 색상 결정) */
   isDone?: boolean;
-  /** 펼쳐진 상태일 때 step 배지 색상 (기본값: 'blue') */
   activeColor?: 'blue' | 'indigo' | 'violet' | 'emerald';
-  /** 헤더 클릭 시 */
   onClick: () => void;
-  /** 닫힌 상태일 때 헤더 아래 요약 텍스트 */
   summary?: React.ReactNode;
-  /** 아코디언 내부 컨텐츠 */
+  hasWarning?: boolean;
   children: React.ReactNode;
 };
 
@@ -51,13 +45,13 @@ export default function Accordion({
   activeColor = 'blue',
   onClick,
   summary,
+  hasWarning = false,
   children,
 }: AccordionProps) {
   const colors = COLOR_MAP[activeColor];
 
   return (
     <div className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] transition-all duration-300">
-      {/* 헤더 */}
       <button
         type="button"
         onClick={onClick}
@@ -65,7 +59,7 @@ export default function Accordion({
           isOpen ? colors.headerActive : 'hover:bg-slate-50/50'
         }`}
       >
-        <div className="flex items-center gap-3">
+        <div className="flex flex-1 items-center gap-3">
           <span
             className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-black ${
               isOpen ? colors.badge : 'bg-slate-100 text-slate-700'
@@ -73,19 +67,22 @@ export default function Accordion({
           >
             {step}
           </span>
-          <div>
-            <h3 className="flex items-center gap-2 text-sm font-extrabold text-slate-800">
-              {title}
-            </h3>
-            {!isOpen && summary && (
-              <p className="mt-1 text-[11px] font-semibold text-slate-500">{summary}</p>
+          <h3 className="flex items-center gap-2 text-sm font-extrabold text-slate-800">
+            {title}
+            {hasWarning && (
+              <span className="rounded-md bg-amber-50 px-2 py-0.5 text-xs font-extrabold text-amber-700">
+                리스크 감지됨
+              </span>
             )}
-          </div>
+          </h3>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-4">
+          {summary && <span className="text-[11px] font-extrabold text-slate-500">{summary}</span>}
           {isOpen ? (
-            <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${colors.activeBadge}`}>
+            <span
+              className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${colors.activeBadge}`}
+            >
               작성 중
             </span>
           ) : isDone ? (
@@ -101,12 +98,19 @@ export default function Accordion({
         </div>
       </button>
 
-      {/* 바디 */}
-      {isOpen && (
-        <div className="animate-in fade-in space-y-4 border-t border-slate-100 bg-slate-50/10 p-6 duration-200">
-          {children}
-        </div>
-      )}
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25, ease: 'easeInOut' }}
+            className="overflow-hidden"
+          >
+            <div className="space-y-4 border-t border-slate-100 bg-slate-50/10 p-6">{children}</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -41,6 +41,8 @@ interface AppState {
   selectedContractId: string | null;
   // state global/toast: Toast | null
   toast: { text: string; type: 'success' | 'info' | 'warning' } | null;
+  // state global/fontSize: number
+  fontSize: number;
 
   // state contract/wizardStep: number
   wizardStep: number;
@@ -106,6 +108,7 @@ interface AppState {
   wizPositionAllowance: number;
   // state contract/wizOtherAllowance: number
   wizOtherAllowance: number;
+  wizOtherAllowanceName: string;
   // state contract/wizHasNonCompete: boolean
   wizHasNonCompete: boolean;
   // state contract/wizNonCompetePeriod: string
@@ -200,6 +203,7 @@ interface AppState {
   setWizOvertimeAllowance: (amount: number) => void;
   setWizPositionAllowance: (amount: number) => void;
   setWizOtherAllowance: (amount: number) => void;
+  setWizOtherAllowanceName: (name: string) => void;
   setWizHasNonCompete: (has: boolean) => void;
   setWizNonCompetePeriod: (period: string) => void;
   setWizNonCompeteRange: (range: string) => void;
@@ -229,6 +233,7 @@ interface AppState {
   setNewInstPhone: (phone: string) => void;
   setNewInstEmail: (email: string) => void;
   handleImportInstructor: (e: React.FormEvent) => void;
+  setFontSize: (size: number) => void;
 }
 
 export const useStore = create<AppState>((set, get) => ({
@@ -281,12 +286,23 @@ export const useStore = create<AppState>((set, get) => ({
   wizInstructorBirthDate: '',
   // state contract/wizContractType: ContractType
   wizContractType: '강사근로계약서',
-  // state contract/wizStartDate: string
-  wizStartDate: '2026-07-09',
-  // state contract/wizPeriodYear: number
+  wizStartDate: (() => {
+    const d = new Date();
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  })(),
   wizPeriodYear: 1,
-  // state contract/wizEndDate: string
-  wizEndDate: '2027-07-08',
+  wizEndDate: (() => {
+    const d = new Date();
+    d.setFullYear(d.getFullYear() + 1);
+    d.setDate(d.getDate() - 1);
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  })(),
   // state contract/wizProbation: string
   wizProbation: '3개월',
   // state contract/wizWorkDaysType: '5days' | '3days' | 'custom'
@@ -366,6 +382,7 @@ export const useStore = create<AppState>((set, get) => ({
   wizPositionAllowance: 0,
   // state contract/wizOtherAllowance: number
   wizOtherAllowance: 0,
+  wizOtherAllowanceName: '',
   // state contract/wizHasNonCompete: boolean
   wizHasNonCompete: false,
   // state contract/wizNonCompetePeriod: string
@@ -380,6 +397,9 @@ export const useStore = create<AppState>((set, get) => ({
   wizContractText: '',
   // state contract/wizCommissionPercent: number
   wizCommissionPercent: 30,
+
+  // state global/fontSize: number
+  fontSize: parseInt(localStorage.getItem('hakon_font_size') || '16'),
 
   // state instructor/selectedMyPageContractId: string | null
   selectedMyPageContractId: null,
@@ -495,6 +515,7 @@ export const useStore = create<AppState>((set, get) => ({
   setWizOvertimeAllowance: amount => set({ wizOvertimeAllowance: amount }),
   setWizPositionAllowance: amount => set({ wizPositionAllowance: amount }),
   setWizOtherAllowance: amount => set({ wizOtherAllowance: amount }),
+  setWizOtherAllowanceName: name => set({ wizOtherAllowanceName: name }),
   setWizHasNonCompete: has => set({ wizHasNonCompete: has }),
   setWizNonCompetePeriod: period => set({ wizNonCompetePeriod: period }),
   setWizNonCompeteRange: range => set({ wizNonCompeteRange: range }),
@@ -869,5 +890,11 @@ export const useStore = create<AppState>((set, get) => ({
     showToast(`${newInstName} 강사가 동기화 및 임포트되었습니다.`, 'success');
 
     set({ newInstName: '', newInstPhone: '', newInstEmail: '' });
+  },
+
+  setFontSize: size => {
+    localStorage.setItem('hakon_font_size', String(size));
+    document.documentElement.style.setProperty('--font-size', `${size}px`);
+    set({ fontSize: size });
   },
 }));

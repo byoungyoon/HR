@@ -269,6 +269,14 @@ export function analyzeContractContent(
       alternativeText:
         '퇴사 후 학원의 영업비밀 및 고유 교수안을 누출하지 않으며, 기존 원생의 비정상적 이탈 유도를 금지하는 서약으로 대체한다.',
     },
+    {
+      keywords: ['퇴직금', '청구하지', '부지급'],
+      originalText: '강사는 어떠한 경우에도 퇴직금을 청구하지 않기로 확약한다.',
+      detectedRisk:
+        '퇴직급여법 제9조 위반 소지가 높습니다. 퇴직금 청구권 사전 포기 약정은 강행법규 위반으로 무효이며, 퇴직 시 반드시 지급해야 합니다.',
+      alternativeText:
+        '퇴직 시 관련 법령에 의거하여 지급 조건 충족 시 퇴직금을 전액 정상 지급한다.',
+    },
   ];
 
   const detectedToxicClauses: {
@@ -278,18 +286,32 @@ export function analyzeContractContent(
     isApplied: boolean;
   }[] = [];
 
-  // 텍스트 분석 또는 설정에 따른 매칭
+  // 텍스트 분석 또는 설정에 따른 매칭 (줄바꿈 단위 정밀 분석)
+  const lines = text.split('\n');
   toxicRules.forEach(rule => {
-    const hasKeyword = rule.keywords.some(keyword => text.includes(keyword));
-    if (hasKeyword) {
-      if (riskStatus !== 'danger') riskStatus = 'warning';
-      detectedToxicClauses.push({
-        originalText: rule.originalText,
-        detectedRisk: rule.detectedRisk,
-        alternativeText: rule.alternativeText,
-        isApplied: false,
-      });
-    }
+    lines.forEach(line => {
+      const trimmedLine = line.trim();
+      if (!trimmedLine) return;
+
+      const hasKeyword = rule.keywords.some(keyword => trimmedLine.includes(keyword));
+      const hasAlternative = trimmedLine.includes(rule.alternativeText);
+
+      // 이미 대안으로 안전하게 대체된 문장은 제외
+      if (hasKeyword && !hasAlternative) {
+        if (riskStatus !== 'danger') riskStatus = 'warning';
+        
+        // 중복 추가 방지
+        const isAlreadyAdded = detectedToxicClauses.some(c => c.originalText === trimmedLine);
+        if (!isAlreadyAdded) {
+          detectedToxicClauses.push({
+            originalText: trimmedLine,
+            detectedRisk: rule.detectedRisk,
+            alternativeText: rule.alternativeText,
+            isApplied: false,
+          });
+        }
+      }
+    });
   });
 
   return {
@@ -324,7 +346,7 @@ export const numberToKorean = (num: number): string => {
       }
       result = chunkStr + gUnits[gIndex] + result;
     }
-    temp = Math.floor(temp / 10);
+    temp = Math.floor(temp / 10000);
     gIndex++;
   }
   return result;

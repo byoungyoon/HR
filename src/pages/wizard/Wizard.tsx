@@ -17,6 +17,8 @@ import {
   Clock,
   Building,
   ChevronRight,
+  ClipboardList,
+  Megaphone,
 } from 'lucide-react';
 import { analyzeContractContent, numberToKorean, INITIAL_ACADEMIES } from '../../utils';
 import { ContractType, SalaryType } from '../../types';
@@ -25,6 +27,10 @@ import Step2Area from './_area/Step2.area';
 import { useWizaredStore } from './state';
 import Step3Area from './_area/Step3.area';
 import Step4Area from './_area/Step4.area';
+import Step1AdvArea from './_area/Step1.adv.area';
+import Step2Adv1Area from './_area/Step2.adv1.area';
+import Step2Adv2Area from './_area/Step2.adv2.area';
+import Step2Adv3Area from './_area/Step2.adv3.area';
 
 export default function Wizard() {
   const navigate = useNavigate();
@@ -71,6 +77,7 @@ export default function Wizard() {
     wizSpecialClause,
     wizContractText,
     wizSubStep,
+    wizSubStepClickCount,
     maxUnlockedSubStep,
 
     setWizardStep,
@@ -408,84 +415,330 @@ ${wizSalaryAmount.toLocaleString()}원`;
   }, [weeklyHours]);
 
   const validationResult = analyzeContractContent(
-    wizContractText,
+    wizSpecialClause,
     wizSalaryAmount,
     wizSalaryType,
     weeklyHours,
     hasWeeklyRestAllowance
   );
 
-  const handleSend = () => {
-    handleSendContract(validationResult);
-    navigate('/admin/cabinet');
-  };
-
   const representativeAcademy =
     academies.find(a => a.id === selectedAcademyId) || academies[0] || INITIAL_ACADEMIES[0];
 
   return (
-    <section className="border-custom-slate-border-side bg-background space-y-6 rounded-3xl border p-6">
-      <header className="border-custom-slate-border-side flex items-center justify-between gap-4 border-b pb-5">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-          <h2 className="text-text-title font-extrabold tracking-tight">계약서 작성 마법사</h2>
-          {representativeAcademy && (
-            <div
-              onClick={() => navigate('/admin/academy')}
-              className="hover:bg-custom-slate border-custom-slate-border bg-custom-slate-bg text-text-sub flex cursor-pointer items-center gap-1.5 rounded-lg border px-4 py-1.5 transition-all"
-              title="클릭하여 학원 정보 설정 페이지로 이동"
-            >
-              <div className="text-left">
-                <span className="text-14 block leading-none font-bold">
-                  {representativeAcademy.name}{' '}
-                  <span className="text-text-side text-9 ml-0.5 font-normal">
-                    (학원정보 설정 이동)
-                  </span>
+    <div className="flex items-start pr-8">
+      <style>{`
+        @keyframes warningGlow {
+          0%, 100% { border-color: rgba(245, 158, 11, 0.4); }
+          50% { border-color: rgba(245, 158, 11, 1); }
+        }
+        @keyframes dangerGlow {
+          0%, 100% { border-color: rgba(239, 68, 68, 0.4); }
+          50% { border-color: rgba(239, 68, 68, 1); }
+        }
+        .animate-warning-glow {
+          animation: warningGlow 2.5s infinite ease-in-out;
+        }
+        .animate-danger-glow {
+          animation: dangerGlow 2.5s infinite ease-in-out;
+        }
+      `}</style>
+      <section className="flex-1">
+        <header className="flex min-h-16 items-center justify-between gap-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <h2 className="text-text-title font-extrabold tracking-tight">계약서 작성</h2>
+            {representativeAcademy && (
+              <button
+                type="button"
+                onClick={() => navigate('/admin/academy')}
+                className="flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-3.5 py-1.5 text-xs font-black text-slate-700 transition-all duration-200 hover:bg-slate-50 hover:border-slate-400"
+                title="클릭하여 학원 정보 설정 페이지로 이동"
+              >
+                <Building className="h-3.5 w-3.5 text-slate-500" />
+                <span>{representativeAcademy.name}</span>
+                <span className="text-[10px] font-bold text-slate-400">
+                  (학원 설정 이동)
                 </span>
+              </button>
+            )}
+          </div>
+
+          <div className="flex items-center gap-2 overflow-x-auto py-1.5 text-[13px]">
+            {[
+              { step: 1, label: '1. 강사 및 계약 설정' },
+              { step: 2, label: '2. 근무 및 급여설정' },
+              { step: 3, label: '3. 특약/자문' },
+              { step: 4, label: '4. 초안검토' },
+            ].map((item, idx) => (
+              <div key={item.step} className="flex shrink-0 items-center gap-2">
+                <span
+                  onClick={() => {
+                    if (item.step < wizardStep) {
+                      setWizardStep(item.step);
+                    }
+                  }}
+                  className={`transition-all duration-200 ${
+                    wizardStep === item.step
+                      ? 'cursor-default font-black text-indigo-600'
+                      : item.step < wizardStep
+                        ? 'text-slate-650 cursor-pointer font-bold hover:text-indigo-600'
+                        : 'cursor-not-allowed font-medium text-slate-300'
+                  }`}
+                >
+                  {item.label}
+                </span>
+                {idx < 3 && <ChevronRight className="h-3 w-3 text-slate-300" />}
+              </div>
+            ))}
+          </div>
+        </header>
+
+        {wizardStep === 1 && <Step1Area />}
+        {wizardStep === 2 && <Step2Area />}
+        {wizardStep === 3 && <Step3Area />}
+        {wizardStep === 4 && <Step4Area />}
+      </section>
+
+      <section className="ml-6 w-[540px] shrink-0">
+        <header className="min-h-16" />
+        {wizardStep === 1 && <Step1AdvArea />}
+
+        {wizardStep === 2 && (
+          <div
+            className="transition-all duration-300 ease-in-out"
+            style={{
+              marginTop: wizSubStep === 2 ? '80px' : wizSubStep === 3 ? '160px' : '0px',
+            }}
+          >
+            {wizSubStep === 1 && <Step2Adv1Area key={`adv1-${wizSubStepClickCount}`} />}
+            {wizSubStep === 2 && <Step2Adv2Area key={`adv2-${wizSubStepClickCount}`} />}
+            {wizSubStep === 3 && <Step2Adv3Area key={`adv3-${wizSubStepClickCount}`} />}
+            {wizSubStep === 0 && (
+              <>
+                {(() => {
+                  const calcPeriodDays = (start: string, end: string): number => {
+                    if (!start || !end) return 0;
+                    return (
+                      Math.round(
+                        (new Date(end).getTime() - new Date(start).getTime()) /
+                          (1000 * 60 * 60 * 24)
+                      ) + 1
+                    );
+                  };
+                  const periodDays = calcPeriodDays(wizStartDate, wizEndDate);
+                  const isUnderOneYear = periodDays > 0 && periodDays < 365;
+                  const isProbationWarning = wizProbation !== '없음' && parseInt(wizProbation) > 3;
+                  const hasStep1Warning = isUnderOneYear || isProbationWarning;
+                  const hasStep2Warning = weeklyHours >= 15;
+
+                  const minWageLimit = 10320;
+                  let hasStep3Warning = false;
+                  if (wizSalaryType === 'hourly') {
+                    hasStep3Warning = wizSalaryAmount < minWageLimit;
+                  } else {
+                    const weeklyRestHours =
+                      weeklyHours >= 15 ? Math.min(8, (weeklyHours / 40) * 8) : 0;
+                    const monthlyHours = (weeklyHours + weeklyRestHours) * 4.345;
+                    const calcMinWage = Math.round(monthlyHours * minWageLimit);
+                    hasStep3Warning = wizSalaryAmount < calcMinWage;
+                  }
+
+                  const isStep2WarningActive =
+                    hasStep1Warning || hasStep2Warning || hasStep3Warning;
+
+                  if (isStep2WarningActive) {
+                    return (
+                      <div className="space-y-3 rounded-2xl border border-slate-200 bg-white p-4">
+                        <div className="text-[13px] font-extrabold text-rose-700">
+                          [검토] 확인이 필요한 계약서 리스크 리포트
+                        </div>
+                        <p className="text-[12px] font-medium text-slate-500 leading-relaxed">
+                          작성하신 조건 중 근로기준법 위반 소지나 실무상 주의가 필요한 항목들이
+                          감지되었습니다. 다음 단계로 넘어가기 전 확인해 보십시오.
+                        </p>
+
+                        {hasStep1Warning && (
+                          <div className="border-t border-slate-100 pt-3 space-y-2">
+                            {isUnderOneYear && (
+                              <div className="text-[12px]">
+                                <span className="font-extrabold text-amber-700">
+                                  [주의] 퇴직금 회피 의혹
+                                </span>
+                                <p className="mt-1 font-medium text-slate-600 leading-relaxed">
+                                  계약기간이 1년 미만으로 설정되어 퇴직금 지급 의무가 없습니다.
+                                  단, 반복 갱신 시 법적 리스크가 발생할 수 있습니다.
+                                </p>
+                              </div>
+                            )}
+                            {isProbationWarning && (
+                              <div className="text-[12px]">
+                                <span className="font-extrabold text-amber-700">
+                                  [주의] 수습기간 3개월 초과
+                                </span>
+                                <p className="mt-1 font-medium text-slate-600 leading-relaxed">
+                                  수습 감액(10% 이내)은 최초 3개월까지만 유효합니다.
+                                </p>
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {hasStep2Warning && (
+                          <div className="border-t border-slate-100 pt-3">
+                            <div className="text-[12px]">
+                              <span className="font-extrabold text-amber-700">
+                                [주의] 주휴수당 필수 발생
+                              </span>
+                              <p className="mt-1 font-medium text-slate-600 leading-relaxed">
+                                주당 근로시간이 15시간 이상이므로 주휴수당 지급 및 명시 의무가
+                                발생합니다.
+                              </p>
+                            </div>
+                          </div>
+                        )}
+
+                        {hasStep3Warning && (
+                          <div className="border-t border-slate-100 pt-3">
+                            <div className="text-[12px]">
+                              <span className="font-extrabold text-rose-700">
+                                [위험] 최저임금법 위반 소지
+                              </span>
+                              <p className="mt-1 font-medium text-slate-600 leading-relaxed">
+                                책정된 급여(또는 시급)가 2026년 최저임금(
+                                {minWageLimit.toLocaleString()}원) 기준 월 환산액 미만입니다. 즉시
+                                급여 조율이 권장됩니다.
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <div className="rounded-2xl border border-slate-200 bg-white p-5 transition-all duration-300">
+                      <div className="mb-2 text-[13px] font-extrabold text-indigo-700">
+                        완벽합니다! 다음 단계로 가볼까요?
+                      </div>
+                      <p className="text-[12px] font-medium text-slate-650 leading-relaxed">
+                        근무 요건 및 급여 책정에 리스크나 법적 위반 소지가 발견되지 않았습니다.
+                        안전하게 계약서를 완성하실 수 있습니다. 다음 버튼을 눌러 계약서 작성을 계속
+                        진행하세요.
+                      </p>
+                    </div>
+                  );
+                })()}
+              </>
+            )}
+          </div>
+        )}
+
+        {wizardStep === 3 && (
+          <div className="space-y-4 mt-4">
+            {/* [자문] 특약사항 법적 유효성 가이드 */}
+            <div className="space-y-2 rounded-2xl border border-slate-200 bg-white p-4">
+              <div className="text-slate-800 text-[13px] font-extrabold">
+                [자문] 특약사항 법적 유효성 가이드
+              </div>
+              <p className="text-slate-650 text-[12px] leading-relaxed font-medium">
+                근로기준법에 반하는 강제적인 벌금 부과나 퇴직금 포기 합의 등은 특약으로 기재하더라도 전부 무효가 되며 오히려 임금체불이나 근로기준법 위반으로 형사 처벌 대상이 될 수 있습니다.
+              </p>
+            </div>
+
+            {validationResult.detectedToxicClauses.length > 0 ? (
+              <div className="space-y-4">
+                {/* 위험 주의 배너 */}
+                <div className="animate-in fade-in space-y-2 rounded-2xl border-2 border-rose-200 bg-white p-4 text-rose-900 duration-200 animate-danger-glow">
+                  <div className="text-[13px] font-extrabold text-rose-700">
+                    [위험] 법적 위반 독소 조항 탐지됨 (
+                    {validationResult.detectedToxicClauses.length}건)
+                  </div>
+                  <p className="text-slate-600 text-[12px] leading-relaxed font-medium">
+                    입력하신 특약사항에서 근로기준법을 위반할 위험이 매우 높은 조항이
+                    발견되었습니다. 아래 권고안으로 즉시 교체하십시오.
+                  </p>
+                </div>
+
+                {/* 개별 대안 처방 카드 */}
+                <div className="max-h-[380px] space-y-4 overflow-y-auto pr-1">
+                  {validationResult.detectedToxicClauses.map((clause, idx) => (
+                    <div
+                      key={idx}
+                      className="animate-in fade-in space-y-3 rounded-2xl border border-slate-200 bg-white p-4 text-slate-700 duration-200"
+                    >
+                      <span className="inline-block rounded bg-red-50 px-2 py-0.5 text-[10px] font-semibold text-red-600">
+                        독소조항 의혹 조항
+                      </span>
+                      <p className="text-[12px] font-extrabold text-slate-800 italic">
+                        "{clause.originalText}"
+                      </p>
+                      <div className="rounded-xl border border-slate-100 bg-slate-50 p-2.5 text-[12px] leading-relaxed font-medium text-slate-650">
+                        {clause.detectedRisk}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          let updatedClause = wizSpecialClause.replace(
+                            clause.originalText,
+                            clause.alternativeText
+                          );
+                          if (updatedClause === wizSpecialClause) {
+                            updatedClause += `\n[대안 합의] ${clause.alternativeText}`;
+                          }
+                          setWizSpecialClause(updatedClause);
+                          showToast('독소 조항이 안전한 표준 대안으로 처방되었습니다!', 'success');
+                        }}
+                        className="w-full rounded-xl bg-blue-600 py-2.5 text-[12px] font-extrabold text-white transition-all hover:bg-blue-700"
+                      >
+                        표준 노무 권고안 대안조항으로 교체
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              /* 안전 배너 */
+              <div className="animate-in fade-in space-y-2 rounded-2xl border-2 border-emerald-100 bg-white p-4 text-emerald-900 duration-200">
+                <div className="text-[13px] font-extrabold text-emerald-700">
+                  [안전] 노무법 위반 리스크 없음
+                </div>
+                <p className="text-slate-600 text-[12px] leading-relaxed font-medium">
+                  현재 등록된 특약사항 내에 근로기준법 및 대법원 판례 기준을 위반하는 독소 조항이
+                  감지되지 않았습니다. 안전한 계약 체결이 가능합니다.
+                </p>
+              </div>
+            )}
+
+            {/* 검증 로그 상세 리스트 */}
+            <div className="space-y-2.5 rounded-2xl border border-slate-200 bg-white p-4 text-slate-700">
+              <p className="border-b border-slate-100 pb-1.5 text-[13px] font-extrabold text-slate-800">
+                실시간 근로계약 검증 피드백
+              </p>
+              <div className="max-h-[220px] space-y-2 overflow-y-auto pr-1">
+                {validationResult.riskLog.map((log, i) => {
+                  const match = log.match(/^(\[[^\]]+\])\s*(.*)$/);
+                  const prefix = match ? match[1] : '';
+                  const content = match ? match[2] : log;
+
+                  let prefixColor = 'text-slate-800 font-extrabold';
+                  if (prefix === '[준수]') prefixColor = 'text-emerald-700 font-extrabold';
+                  if (prefix === '[주의]') prefixColor = 'text-amber-700 font-extrabold';
+                  if (prefix === '[위반]') prefixColor = 'text-rose-700 font-extrabold';
+
+                  return (
+                    <p
+                      key={i}
+                      className="text-slate-600 text-[12px] leading-relaxed font-medium"
+                    >
+                      <span className={prefixColor}>{prefix}</span> {content}
+                    </p>
+                  );
+                })}
               </div>
             </div>
-          )}
-        </div>
-
-        {/* 상단 스텝 프로그레스바 - 강사 마이페이지와 동일한 심플 텍스트 & Chevron 스타일 */}
-        <div className="flex items-center gap-2 overflow-x-auto py-1.5 text-[13px]">
-          {[
-            { step: 1, label: '1. 강사 및 계약 설정' },
-            { step: 2, label: '2. 근무 및 급여설정' },
-            { step: 3, label: '3. 특약/자문' },
-            { step: 4, label: '4. 초안검토' },
-          ].map((item, idx) => (
-            <div key={item.step} className="flex shrink-0 items-center gap-2">
-              <span
-                onClick={() => {
-                  if (item.step < wizardStep) {
-                    setWizardStep(item.step);
-                  }
-                }}
-                className={`transition-all duration-200 ${
-                  wizardStep === item.step
-                    ? 'cursor-default font-black text-indigo-600'
-                    : item.step < wizardStep
-                      ? 'text-slate-650 cursor-pointer font-bold hover:text-indigo-600'
-                      : 'cursor-not-allowed font-medium text-slate-300'
-                }`}
-              >
-                {item.label}
-              </span>
-              {idx < 3 && <ChevronRight className="h-3 w-3 text-slate-300" />}
-            </div>
-          ))}
-        </div>
-      </header>
-
-      {wizardStep === 1 && <Step1Area />}
-
-      {wizardStep === 2 && <Step2Area />}
-
-      {/* 스텝 3: 특약사항 및 조항 위반 진단 */}
-      {wizardStep === 3 && <Step3Area />}
-
-      {/* 스텝 4: 최종 초안 확인 및 발송 */}
-      {wizardStep === 4 && <Step4Area />}
-    </section>
+          </div>
+        )}
+      </section>
+    </div>
   );
 }

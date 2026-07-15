@@ -1,13 +1,13 @@
-import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { useStore } from '../store/useStore';
-import { Lock, Smartphone, Layers, Plus, FileText, Building } from 'lucide-react';
 import { useEffect } from 'react';
 import SelectModeAction from '../pages/_action/SelectMode.action';
 import MenuSelectAction from '../pages/_action/MenuSelect.action';
+import FontSizeControllerAction from '../pages/_action/FontSizeController.action';
 
 export default function Layout() {
   const location = useLocation();
-  const { currentRole, setCurrentRole, toast, showToast, eventLogs, academies } = useStore();
+  const { currentRole, setCurrentRole, fontSize } = useStore();
 
   // Sync role state with active route on initial load/reload
   useEffect(() => {
@@ -22,24 +22,31 @@ export default function Layout() {
     }
   }, [location.pathname]);
 
+  // Sync global HTML font-size with Zustand store
+  useEffect(() => {
+    document.documentElement.style.setProperty('--font-size', `${fontSize}px`);
+  }, [fontSize]);
+
   const isAdmin = currentRole === 'admin';
 
   return (
-    <div className="bg-foreground flex min-h-screen flex-col">
-      <header className="bg-background border-b-custom-slate-border relative flex h-14 items-center justify-end border-b py-2 pr-4 shadow-xs transition-colors">
+    <div className="bg-foreground flex h-screen flex-col">
+      <div className="fixed bottom-3 left-3 z-50">
         <SelectModeAction />
-      </header>
+      </div>
 
-      <main className="mx-auto flex w-full max-w-[1660px] flex-1 flex-col p-8">
+      <div className="fixed bottom-3 right-3 z-50">
+        <FontSizeControllerAction />
+      </div>
+
+      <main className="flex h-full w-full flex-1 flex-col">
         {isAdmin ? (
-          <div className="grid h-full flex-1 grid-cols-1 gap-6 lg:grid-cols-5">
-            <div className="space-y-4 lg:col-span-1">
-              <div className="bg-background h-full rounded-3xl p-3">
-                <MenuSelectAction />
-              </div>
+          <div className="flex h-full gap-8">
+            <div className="h-full">
+              <MenuSelectAction />
             </div>
 
-            <div className="space-y-6 lg:col-span-4">
+            <div className="min-w-0 flex-1 space-y-6">
               <Outlet />
             </div>
           </div>

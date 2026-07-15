@@ -11,10 +11,10 @@ export default function ClickNextStepAction() {
   return (
     <button
       onClick={handleNext}
-      className="flex cursor-pointer items-center space-x-1 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white shadow-md shadow-blue-100 transition-all duration-200 hover:bg-blue-700"
+      className="flex cursor-pointer items-center space-x-1.5 rounded-xl bg-slate-900 px-5 py-2.5 text-xs font-black text-white shadow-sm transition-all duration-200 hover:bg-slate-800"
     >
-      <span>다음</span>
-      <ArrowRight className="h-4 w-4" />
+      <span>다음 단계로</span>
+      <ArrowRight className="h-3.5 w-3.5" />
     </button>
   );
 }
