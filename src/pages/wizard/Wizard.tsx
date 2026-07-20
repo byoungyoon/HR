@@ -17,6 +17,7 @@ import {
   Clock,
   Building,
   ChevronRight,
+  ChevronLeft,
   ClipboardList,
   Megaphone,
 } from 'lucide-react';
@@ -451,14 +452,12 @@ ${wizSalaryAmount.toLocaleString()}원`;
               <button
                 type="button"
                 onClick={() => navigate('/admin/academy')}
-                className="flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-3.5 py-1.5 text-xs font-black text-slate-700 transition-all duration-200 hover:bg-slate-50 hover:border-slate-400"
+                className="flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-3.5 py-1.5 text-xs font-black text-slate-700 transition-all duration-200 hover:border-slate-400 hover:bg-slate-50"
                 title="클릭하여 학원 정보 설정 페이지로 이동"
               >
                 <Building className="h-3.5 w-3.5 text-slate-500" />
                 <span>{representativeAcademy.name}</span>
-                <span className="text-[10px] font-bold text-slate-400">
-                  (학원 설정 이동)
-                </span>
+                <span className="text-[10px] font-bold text-slate-400">(학원 설정 이동)</span>
               </button>
             )}
           </div>
@@ -479,9 +478,9 @@ ${wizSalaryAmount.toLocaleString()}원`;
                   }}
                   className={`transition-all duration-200 ${
                     wizardStep === item.step
-                      ? 'cursor-default font-black text-indigo-600'
+                      ? 'cursor-default font-black text-custom-indigo'
                       : item.step < wizardStep
-                        ? 'text-slate-650 cursor-pointer font-bold hover:text-indigo-600'
+                        ? 'text-slate-650 cursor-pointer font-bold hover:text-custom-indigo'
                         : 'cursor-not-allowed font-medium text-slate-300'
                   }`}
                 >
@@ -500,16 +499,64 @@ ${wizSalaryAmount.toLocaleString()}원`;
       </section>
 
       <section className="ml-6 w-[540px] shrink-0">
-        <header className="min-h-16" />
+        <header className="flex min-h-16 items-center justify-end">
+          {wizardStep <= 3 && (
+            <div className="flex items-center gap-2">
+              {wizardStep > 1 && (
+                <button
+                  type="button"
+                  onClick={() => setWizardStep(wizardStep - 1)}
+                  className="flex items-center gap-1 rounded-xl border border-slate-350 bg-white px-3 py-1.5 text-xs font-black text-slate-700 transition-all duration-200 hover:border-slate-400 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-250 cursor-pointer"
+                >
+                  <ChevronLeft className="h-3.5 w-3.5" />
+                  <span>이전</span>
+                </button>
+              )}
+
+              {wizardStep === 1 && (
+                <button
+                  type="button"
+                  onClick={() => setWizardStep(2)}
+                  className="flex cursor-pointer items-center space-x-1 rounded-xl bg-slate-900 px-4 py-2 text-xs font-black text-white shadow-sm transition-all duration-200 hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200"
+                >
+                  <span>다음 단계로</span>
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </button>
+              )}
+
+              {wizardStep === 2 && (
+                <button
+                  type="button"
+                  onClick={() => setWizardStep(3)}
+                  disabled={wizSubStep !== 0}
+                  className={`flex items-center space-x-1 rounded-xl px-4 py-2 text-xs font-black shadow-sm transition-all duration-200 ${
+                    wizSubStep === 0
+                      ? 'bg-slate-900 text-white hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 cursor-pointer'
+                      : 'bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed dark:bg-slate-800 dark:text-slate-650 dark:border-slate-800'
+                  }`}
+                >
+                  <span>다음 단계로</span>
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </button>
+              )}
+
+              {wizardStep === 3 && (
+                <button
+                  type="button"
+                  onClick={() => setWizardStep(4)}
+                  className="flex cursor-pointer items-center space-x-1 rounded-xl bg-slate-900 px-4 py-2 text-xs font-black text-white shadow-sm transition-all duration-200 hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200"
+                >
+                  <span>다음 단계로</span>
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </button>
+              )}
+            </div>
+          )}
+        </header>
         {wizardStep === 1 && <Step1AdvArea />}
 
         {wizardStep === 2 && (
-          <div
-            className="transition-all duration-300 ease-in-out"
-            style={{
-              marginTop: wizSubStep === 2 ? '80px' : wizSubStep === 3 ? '160px' : '0px',
-            }}
-          >
+          <div className="animate-in fade-in">
             {wizSubStep === 1 && <Step2Adv1Area key={`adv1-${wizSubStepClickCount}`} />}
             {wizSubStep === 2 && <Step2Adv2Area key={`adv2-${wizSubStepClickCount}`} />}
             {wizSubStep === 3 && <Step2Adv3Area key={`adv3-${wizSubStepClickCount}`} />}
@@ -552,21 +599,21 @@ ${wizSalaryAmount.toLocaleString()}원`;
                         <div className="text-[13px] font-extrabold text-rose-700">
                           [검토] 확인이 필요한 계약서 리스크 리포트
                         </div>
-                        <p className="text-[12px] font-medium text-slate-500 leading-relaxed">
+                        <p className="text-[12px] leading-relaxed font-medium text-slate-500">
                           작성하신 조건 중 근로기준법 위반 소지나 실무상 주의가 필요한 항목들이
                           감지되었습니다. 다음 단계로 넘어가기 전 확인해 보십시오.
                         </p>
 
                         {hasStep1Warning && (
-                          <div className="border-t border-slate-100 pt-3 space-y-2">
+                          <div className="space-y-2 border-t border-slate-100 pt-3">
                             {isUnderOneYear && (
                               <div className="text-[12px]">
                                 <span className="font-extrabold text-amber-700">
                                   [주의] 퇴직금 회피 의혹
                                 </span>
-                                <p className="mt-1 font-medium text-slate-600 leading-relaxed">
-                                  계약기간이 1년 미만으로 설정되어 퇴직금 지급 의무가 없습니다.
-                                  단, 반복 갱신 시 법적 리스크가 발생할 수 있습니다.
+                                <p className="mt-1 leading-relaxed font-medium text-slate-600">
+                                  계약기간이 1년 미만으로 설정되어 퇴직금 지급 의무가 없습니다. 단,
+                                  반복 갱신 시 법적 리스크가 발생할 수 있습니다.
                                 </p>
                               </div>
                             )}
@@ -575,7 +622,7 @@ ${wizSalaryAmount.toLocaleString()}원`;
                                 <span className="font-extrabold text-amber-700">
                                   [주의] 수습기간 3개월 초과
                                 </span>
-                                <p className="mt-1 font-medium text-slate-600 leading-relaxed">
+                                <p className="mt-1 leading-relaxed font-medium text-slate-600">
                                   수습 감액(10% 이내)은 최초 3개월까지만 유효합니다.
                                 </p>
                               </div>
@@ -589,7 +636,7 @@ ${wizSalaryAmount.toLocaleString()}원`;
                               <span className="font-extrabold text-amber-700">
                                 [주의] 주휴수당 필수 발생
                               </span>
-                              <p className="mt-1 font-medium text-slate-600 leading-relaxed">
+                              <p className="mt-1 leading-relaxed font-medium text-slate-600">
                                 주당 근로시간이 15시간 이상이므로 주휴수당 지급 및 명시 의무가
                                 발생합니다.
                               </p>
@@ -603,7 +650,7 @@ ${wizSalaryAmount.toLocaleString()}원`;
                               <span className="font-extrabold text-rose-700">
                                 [위험] 최저임금법 위반 소지
                               </span>
-                              <p className="mt-1 font-medium text-slate-600 leading-relaxed">
+                              <p className="mt-1 leading-relaxed font-medium text-slate-600">
                                 책정된 급여(또는 시급)가 2026년 최저임금(
                                 {minWageLimit.toLocaleString()}원) 기준 월 환산액 미만입니다. 즉시
                                 급여 조율이 권장됩니다.
@@ -617,10 +664,10 @@ ${wizSalaryAmount.toLocaleString()}원`;
 
                   return (
                     <div className="rounded-2xl border border-slate-200 bg-white p-5 transition-all duration-300">
-                      <div className="mb-2 text-[13px] font-extrabold text-indigo-700">
+                      <div className="mb-2 text-[13px] font-extrabold text-custom-indigo">
                         완벽합니다! 다음 단계로 가볼까요?
                       </div>
-                      <p className="text-[12px] font-medium text-slate-650 leading-relaxed">
+                      <p className="text-slate-650 text-[12px] leading-relaxed font-medium">
                         근무 요건 및 급여 책정에 리스크나 법적 위반 소지가 발견되지 않았습니다.
                         안전하게 계약서를 완성하실 수 있습니다. 다음 버튼을 눌러 계약서 작성을 계속
                         진행하세요.
@@ -634,26 +681,28 @@ ${wizSalaryAmount.toLocaleString()}원`;
         )}
 
         {wizardStep === 3 && (
-          <div className="space-y-4 mt-4">
+          <div className="mt-4 space-y-4">
             {/* [자문] 특약사항 법적 유효성 가이드 */}
             <div className="space-y-2 rounded-2xl border border-slate-200 bg-white p-4">
-              <div className="text-slate-800 text-[13px] font-extrabold">
+              <div className="text-[13px] font-extrabold text-slate-800">
                 [자문] 특약사항 법적 유효성 가이드
               </div>
               <p className="text-slate-650 text-[12px] leading-relaxed font-medium">
-                근로기준법에 반하는 강제적인 벌금 부과나 퇴직금 포기 합의 등은 특약으로 기재하더라도 전부 무효가 되며 오히려 임금체불이나 근로기준법 위반으로 형사 처벌 대상이 될 수 있습니다.
+                근로기준법에 반하는 강제적인 벌금 부과나 퇴직금 포기 합의 등은 특약으로 기재하더라도
+                전부 무효가 되며 오히려 임금체불이나 근로기준법 위반으로 형사 처벌 대상이 될 수
+                있습니다.
               </p>
             </div>
 
             {validationResult.detectedToxicClauses.length > 0 ? (
               <div className="space-y-4">
                 {/* 위험 주의 배너 */}
-                <div className="animate-in fade-in space-y-2 rounded-2xl border-2 border-rose-200 bg-white p-4 text-rose-900 duration-200 animate-danger-glow">
+                <div className="animate-in fade-in animate-danger-glow space-y-2 rounded-2xl border-2 border-rose-200 bg-white p-4 text-rose-900 duration-200">
                   <div className="text-[13px] font-extrabold text-rose-700">
                     [위험] 법적 위반 독소 조항 탐지됨 (
                     {validationResult.detectedToxicClauses.length}건)
                   </div>
-                  <p className="text-slate-600 text-[12px] leading-relaxed font-medium">
+                  <p className="text-[12px] leading-relaxed font-medium text-slate-600">
                     입력하신 특약사항에서 근로기준법을 위반할 위험이 매우 높은 조항이
                     발견되었습니다. 아래 권고안으로 즉시 교체하십시오.
                   </p>
@@ -672,7 +721,7 @@ ${wizSalaryAmount.toLocaleString()}원`;
                       <p className="text-[12px] font-extrabold text-slate-800 italic">
                         "{clause.originalText}"
                       </p>
-                      <div className="rounded-xl border border-slate-100 bg-slate-50 p-2.5 text-[12px] leading-relaxed font-medium text-slate-650">
+                      <div className="text-slate-650 rounded-xl border border-slate-100 bg-slate-50 p-2.5 text-[12px] leading-relaxed font-medium">
                         {clause.detectedRisk}
                       </div>
                       <button
@@ -702,7 +751,7 @@ ${wizSalaryAmount.toLocaleString()}원`;
                 <div className="text-[13px] font-extrabold text-emerald-700">
                   [안전] 노무법 위반 리스크 없음
                 </div>
-                <p className="text-slate-600 text-[12px] leading-relaxed font-medium">
+                <p className="text-[12px] leading-relaxed font-medium text-slate-600">
                   현재 등록된 특약사항 내에 근로기준법 및 대법원 판례 기준을 위반하는 독소 조항이
                   감지되지 않았습니다. 안전한 계약 체결이 가능합니다.
                 </p>
@@ -726,10 +775,7 @@ ${wizSalaryAmount.toLocaleString()}원`;
                   if (prefix === '[위반]') prefixColor = 'text-rose-700 font-extrabold';
 
                   return (
-                    <p
-                      key={i}
-                      className="text-slate-600 text-[12px] leading-relaxed font-medium"
-                    >
+                    <p key={i} className="text-[12px] leading-relaxed font-medium text-slate-600">
                       <span className={prefixColor}>{prefix}</span> {content}
                     </p>
                   );

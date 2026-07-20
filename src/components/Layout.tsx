@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import SelectModeAction from '../pages/_action/SelectMode.action';
 import MenuSelectAction from '../pages/_action/MenuSelect.action';
 import FontSizeControllerAction from '../pages/_action/FontSizeController.action';
+import Header from './Header';
 
 export default function Layout() {
   const location = useLocation();
@@ -46,12 +47,15 @@ export default function Layout() {
               <MenuSelectAction />
             </div>
 
-            <div className="min-w-0 flex-1 space-y-6">
-              <Outlet />
+            <div className="flex min-w-0 flex-1 flex-col">
+              <Header />
+              <div className="flex-1 overflow-y-auto pt-0 pb-6 pr-8 scale-text">
+                <Outlet />
+              </div>
             </div>
           </div>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-6 scale-text">
             <Outlet />
           </div>
         )}

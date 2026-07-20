@@ -3,7 +3,6 @@ import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import Wizard from './pages/wizard/Wizard';
 import Cabinet from './pages/Cabinet';
-import AcademyPage from './pages/Academy';
 import Instructor from './pages/Instructor';
 import { useStore } from './store/useStore';
 
@@ -36,10 +35,6 @@ export const router = createBrowserRouter([
       {
         path: 'admin/cabinet',
         element: <Cabinet />,
-      },
-      {
-        path: 'admin/academy',
-        element: <AcademyPage />,
       },
       {
         path: 'instructor',

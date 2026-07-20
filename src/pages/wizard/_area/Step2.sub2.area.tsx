@@ -324,25 +324,35 @@ export default function Step2Sub2Area({ hasWarning = false }: { hasWarning?: boo
                         }
                       }
                     }}
-                    className={`flex cursor-pointer flex-col items-center justify-center rounded-2xl border py-2.5 text-center transition-all ${
+                    className={`flex cursor-pointer flex-col items-center justify-center rounded-2xl border py-2.5 text-center transition-all duration-200 ${
                       isEditing
-                        ? 'border-indigo-600 bg-indigo-50/15 shadow-sm'
+                        ? 'border-indigo-600 bg-indigo-600 text-white shadow-md shadow-indigo-100'
                         : conf.enabled
-                          ? 'border-slate-200 bg-white hover:border-indigo-300'
-                          : 'border-slate-100 bg-slate-50/40 text-slate-400 hover:border-slate-200'
+                          ? 'border-indigo-150 bg-indigo-50/50 text-indigo-950 shadow-sm'
+                          : 'border-slate-100 bg-slate-50/20 text-slate-400 hover:border-slate-200 hover:bg-slate-50'
                     }`}
                   >
                     <span
-                      className={`text-xs font-black ${conf.enabled ? 'text-slate-800' : 'text-slate-400'}`}
+                      className={`text-xs font-black ${
+                        isEditing
+                          ? 'text-white'
+                          : conf.enabled
+                            ? 'text-indigo-950'
+                            : 'text-slate-400'
+                      }`}
                     >
                       {day.substring(0, 1)}
                     </span>
                     {conf.enabled ? (
-                      <span className="text-indigo-650 mt-1 text-[9px] font-bold">
+                      <span
+                        className={`mt-1 text-[9px] font-bold ${
+                          isEditing ? 'text-indigo-200' : 'text-indigo-650'
+                        }`}
+                      >
                         {conf.startTime.split(':')[0]}~{conf.endTime.split(':')[0]}
                       </span>
                     ) : (
-                      <span className="text-slate-350 mt-1 text-[9px]">-</span>
+                      <span className="mt-1 text-[9px] text-slate-350">-</span>
                     )}
                   </button>
                 );

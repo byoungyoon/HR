@@ -106,6 +106,26 @@ export const INITIAL_CONTRACTS: Contract[] = [
       },
     ],
   },
+  {
+    id: 'DOC_1003',
+    type: 'contract',
+    title: '김태희 강사 파트타임 위촉계약서',
+    version: 1,
+    status: 'draft',
+    personId: 'CI_92817291',
+    createdAt: '2026-07-19T09:00:00Z',
+    hash: 'sha256_a2819c9d92b1a03e',
+    contractType: '강사위촉계약서',
+    salaryType: 'hourly',
+    salaryAmount: 11000,
+    weeklyHours: 12,
+    hasWeeklyRestAllowance: false,
+    contractStart: '2026-08-01',
+    contractEnd: '2027-07-31',
+    riskStatus: 'safe',
+    riskLog: ['[임시 저장] 작성 중인 임시 문서입니다.'],
+    toxicClauses: [],
+  },
 ];
 
 // 초기 감사 로그

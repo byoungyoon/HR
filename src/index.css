@@ -494,3 +494,22 @@ html {
 .animate-advisor-warning-glow {
   animation: advisor-warning-glow 1.2s ease-out;
 }
+
+.scale-text .text-\[9px\] { font-size: calc(9 / 16 * var(--font-size)) !important; }
+.scale-text .text-\[10px\] { font-size: calc(10 / 16 * var(--font-size)) !important; }
+.scale-text .text-\[11px\] { font-size: calc(11 / 16 * var(--font-size)) !important; }
+.scale-text .text-\[12px\] { font-size: calc(12 / 16 * var(--font-size)) !important; }
+.scale-text .text-\[13px\] { font-size: calc(13 / 16 * var(--font-size)) !important; }
+.scale-text .text-\[14px\] { font-size: calc(14 / 16 * var(--font-size)) !important; }
+.scale-text .text-\[15px\] { font-size: calc(15 / 16 * var(--font-size)) !important; }
+.scale-text .text-\[16px\] { font-size: calc(16 / 16 * var(--font-size)) !important; }
+.scale-text .text-\[17px\] { font-size: calc(17 / 16 * var(--font-size)) !important; }
+.scale-text .text-\[18px\] { font-size: calc(18 / 16 * var(--font-size)) !important; }
+.scale-text .text-\[20px\] { font-size: calc(20 / 16 * var(--font-size)) !important; }
+.scale-text .text-\[24px\] { font-size: calc(24 / 16 * var(--font-size)) !important; }
+.scale-text .text-10 { font-size: calc(10 / 16 * var(--font-size)) !important; }
+.scale-text .text-11 { font-size: calc(11 / 16 * var(--font-size)) !important; }
+.scale-text .text-12 { font-size: calc(12 / 16 * var(--font-size)) !important; }
+.scale-text .text-13 { font-size: calc(13 / 16 * var(--font-size)) !important; }
+.scale-text .text-15 { font-size: calc(15 / 16 * var(--font-size)) !important; }
+.scale-text .text-18 { font-size: calc(18 / 16 * var(--font-size)) !important; }

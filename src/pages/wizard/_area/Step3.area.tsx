@@ -4,11 +4,7 @@ import { ArrowRight, ChevronLeft } from 'lucide-react';
 import { useWizaredStore } from '../state';
 
 export default function Step3Area() {
-  const {
-    wizSpecialClause,
-    setWizSpecialClause,
-    setWizardStep,
-  } = useWizaredStore();
+  const { wizSpecialClause, setWizSpecialClause, setWizardStep } = useWizaredStore();
 
   return (
     <div className="space-y-6">
@@ -87,23 +83,6 @@ export default function Step3Area() {
             </button>
           </div>
         </div>
-      </div>
-
-      <div className="flex justify-between border-t border-slate-100 pt-5">
-        <button
-          onClick={() => setWizardStep(2)}
-          className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-black text-slate-700 transition-all duration-200 hover:bg-slate-50 hover:border-slate-300"
-        >
-          <ChevronLeft className="h-3.5 w-3.5" />
-          <span>이전</span>
-        </button>
-        <button
-          onClick={() => setWizardStep(4)}
-          className="flex cursor-pointer items-center space-x-1.5 rounded-xl bg-slate-900 px-5 py-2.5 text-xs font-black text-white shadow-sm transition-all duration-200 hover:bg-slate-800"
-        >
-          <span>최종 초안 검토로 넘어가기</span>
-          <ArrowRight className="h-3.5 w-3.5" />
-        </button>
       </div>
     </div>
   );

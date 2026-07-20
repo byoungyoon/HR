@@ -25,7 +25,7 @@ export default function FontSizeControllerAction() {
   };
 
   const resetFontSize = () => {
-    setFontSize(16);
+    setFontSize(18);
   };
 
   return (
@@ -55,7 +55,7 @@ export default function FontSizeControllerAction() {
       <div className="h-4 w-px bg-slate-700" />
       <button
         onClick={resetFontSize}
-        title="기본 크기로 초기화 (16px)"
+        title="기본 크기로 초기화 (18px)"
         className="flex h-7 w-7 items-center justify-center rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white cursor-pointer"
       >
         <RotateCcw className="h-3.5 w-3.5" />

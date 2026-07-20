@@ -399,7 +399,7 @@ export const useStore = create<AppState>((set, get) => ({
   wizCommissionPercent: 30,
 
   // state global/fontSize: number
-  fontSize: parseInt(localStorage.getItem('hakon_font_size') || '16'),
+  fontSize: parseInt(localStorage.getItem('hakon_font_size') || '18'),
 
   // state instructor/selectedMyPageContractId: string | null
   selectedMyPageContractId: null,

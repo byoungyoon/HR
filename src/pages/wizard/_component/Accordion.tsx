@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -21,8 +21,8 @@ const COLOR_MAP = {
     headerActive: 'border-b border-slate-100 bg-slate-50/80',
   },
   indigo: {
-    badge: 'bg-indigo-600 text-white',
-    activeBadge: 'bg-indigo-50 text-indigo-700',
+    badge: 'bg-custom-indigo text-white',
+    activeBadge: 'bg-custom-indigo-bg text-custom-indigo',
     headerActive: 'border-b border-slate-100 bg-slate-50/80',
   },
   violet: {
@@ -49,6 +49,18 @@ export default function Accordion({
   children,
 }: AccordionProps) {
   const colors = COLOR_MAP[activeColor];
+  const [isExpanded, setIsExpanded] = useState(isOpen);
+
+  useEffect(() => {
+    if (isOpen) {
+      const timer = setTimeout(() => {
+        setIsExpanded(true);
+      }, 250);
+      return () => clearTimeout(timer);
+    } else {
+      setIsExpanded(false);
+    }
+  }, [isOpen]);
 
   return (
     <div className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] transition-all duration-300">
@@ -99,7 +111,7 @@ export default function Accordion({
       </button>
 
       <AnimatePresence initial={false}>
-        {isOpen && (
+        {isExpanded && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}

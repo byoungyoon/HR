@@ -352,13 +352,13 @@ export default function Instructor() {
                   </div>
                 )}
 
-                {/* 2단계: 휴대폰 실명 검증 (EC-10) */}
+                {/* 2단계: 휴대폰 실명 검증 */}
                 {signingStep === 'verify' && (
                   <div className="mx-auto max-w-md space-y-5">
                     <div className="text-center">
                       <Smartphone className="mx-auto mb-1 h-6 w-6 text-emerald-600" />
                       <h3 className="text-xs font-bold text-slate-900">
-                        전자 서명 법적 보증용 본인확인 (EC-10)
+                        전자 서명 법적 보증용 본인확인
                       </h3>
                     </div>
 
@@ -449,7 +449,7 @@ export default function Instructor() {
                     <div className="text-center">
                       <FileSignature className="mx-auto mb-1 h-6 w-6 text-emerald-600" />
                       <h3 className="text-xs font-bold text-slate-900">
-                        본인 서명 드로잉 기입 (8.2 / EC-11)
+                        본인 서명 드로잉 기입
                       </h3>
                     </div>
 

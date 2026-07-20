@@ -78,7 +78,7 @@ export default function Step2Sub1Area({ hasWarning = false }: { hasWarning?: boo
         <div className="flex items-center gap-2">
           <label className="block text-xs font-bold text-slate-700">계약 기간</label>
           {periodLabel && (
-            <span className="rounded-md bg-indigo-50 px-1.5 py-0.5 text-[10px] font-extrabold text-indigo-650 animate-in fade-in">
+            <span className="rounded-md bg-custom-indigo-bg px-1.5 py-0.5 text-[10px] font-extrabold text-custom-indigo animate-in fade-in">
               {periodLabel}
             </span>
           )}
@@ -122,10 +122,10 @@ export default function Step2Sub1Area({ hasWarning = false }: { hasWarning?: boo
               key={opt}
               type="button"
               onClick={() => setWizProbation(opt)}
-              className={`cursor-pointer rounded-xl border px-4 py-2 text-xs font-bold transition-all duration-150 ${
+              className={`cursor-pointer rounded-xl border px-5 py-2.5 text-xs font-black transition-all duration-200 ${
                 wizProbation === opt
-                  ? 'border-indigo-600 bg-indigo-50/20 text-indigo-950 shadow-sm'
-                  : 'border-slate-200 bg-white text-slate-600 hover:border-slate-350 hover:bg-slate-50/30'
+                  ? 'border-custom-indigo bg-custom-indigo text-white shadow-md shadow-custom-indigo-border'
+                  : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50'
               }`}
             >
               {opt}
